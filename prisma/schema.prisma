@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Size {
+  S
+  M
+  L
+  XL
+  XXL
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  provider String?
+  providerId String? @unique
+  name  String?
+  role Role? @default(MEMBER)
+  customer   Customer? 
+  cart Cart[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  address   String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String?  @unique   
+  user      User?    @relation(fields: [userId], references: [providerId], onDelete: Cascade)
+  orders Order[]
+  @@map("customers")
+}
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  size        Size
+  likes       Int @default(0)
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int      @default(0)
+  category    String?
+  images      Json?
+  isActive    Boolean  @default(true)
+  cartItem    CartItem?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  orders      Order[]
+
+  @@map("products")
+}
+model ProductKustom {
+  id       String  @id @default(cuid())
+  modelId  String  @unique
+  name     String
+  modelUrl String 
+  photo    String?
+  uvUrl    String?
+  price    Decimal @default(0)
+  isActive Boolean @default(true)
+  cartItem CartItem?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[] 
+
+  @@map("productKustoms")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderId     String      @unique
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  quantity    Int?
+  cartItem CartItem?
+  // Relations
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  productKustomId String?
+  productKustom   ProductKustom? @relation(fields: [productKustomId], references: [id], onDelete: Cascade)
+  productId String?
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  design Design?
+
+  @@map("orders")
+}
+ model Cart {
+  id String @id @default(cuid())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ }
+model CartItem{
+  id String @id @default(cuid())
+  quantity Int
+
+  
+  designId String? @unique
+  orderId String? @unique
+  productKustomId String? @unique
+  productId String? @unique
+  cartId String
+  order Order? @relation(fields: [orderId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+  productKustom ProductKustom? @relation(fields: [productKustomId], references: [id], onDelete: Cascade)
+  cart Cart? @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  design Design? @relation(fields: [designId],references: [ id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Design {
+  id              String @id @default(cuid())
+  fabricData      Json   // Complete fabric.js JSON data
+  designImage     String // Base64 image
+  backgroundColor String
+  decalColor      String
+  totalObjects    Int    @default(0)
+  hasUVGuide      Boolean @default(false)
+  canvasWidth     Int
+  canvasHeight    Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  cartItem            CartItem?
+  // Relations
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  designObjects DesignObject[]
+
+  @@map("designs")
+}
+
+model DesignObject {
+  id         String @id @default(cuid())
+  type       String // rect, circle, text, image
+  name       String
+  left       Float?
+  top        Float?
+  width      Float?
+  height     Float?
+  radius     Float?
+  fill       String?
+  fontSize   Int?
+  text       String?
+  fontFamily String?
+  opacity    Float?
+  createdAt  DateTime @default(now())
+
+  // Relations
+  designId String
+  design   Design @relation(fields: [designId], references: [id], onDelete: Cascade)
+
+  @@map("design_objects")
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
