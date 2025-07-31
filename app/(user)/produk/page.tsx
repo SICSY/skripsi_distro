@@ -11,6 +11,8 @@ import { Search, Package, ShoppingCart, Grid3X3, List, ChevronLeft, ChevronRight
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import Header from "@/src/view/header";
 
 interface ProductKustom {
   id: string;
@@ -41,15 +43,15 @@ interface Product {
 }
 
 const PRODUCT_CATEGORIES = [
-  { value: "all", label: "All Categories" },
-  { value: "electronics", label: "Electronics" },
-  { value: "clothing", label: "Clothing" },
-  { value: "books", label: "Books" },
-  { value: "home", label: "Home & Garden" },
-  { value: "sports", label: "Sports" },
-  { value: "toys", label: "Toys" },
-  { value: "beauty", label: "Beauty" },
-  { value: "automotive", label: "Automotive" }
+  { value: "all", label: "All" },
+  { value: "kemeja", label: "Kemeja" },
+  { value: "kaos", label: "Kaos" },
+  { value: "sweater", label: "Sweater" },
+  { value: "hijab", label: "Hijab" },
+  { value: "topi", label: "Topi" },
+  { value: "kaos_kaki", label: "Kaos Kaki" },
+  { value: "hoodie", label: "Hoodie" },
+  { value: "sepatu", label: "Sepatu" }
 ];
 
 const SORT_OPTIONS = [
@@ -165,7 +167,7 @@ export default function ProductsPage() {
               {product._count.orders}
             </div>
           </div>
-          <Button onClick={() => handleAddToCart(product, "kustom")} className='w-full bg-purple-600 hover:bg-purple-700'>
+          <Button onClick={() => handleAddToCart(product, "kustom")} className='w-full bg-purple-600 hover:bg-purple-700 text-black'>
             <Palette className='w-4 h-4 mr-2' />
             Customize Now
           </Button>
@@ -224,7 +226,14 @@ export default function ProductsPage() {
               </div>
             </div>
           </div>
-          <Button onClick={() => handleAddToCart(product, "regular")} disabled={product.stock === 0} className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-700'>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart(product, "regular");
+            }}
+            disabled={product.stock === 0}
+            className='w-full disabled:bg-zinc-700 text-black'
+          >
             <ShoppingCart className='w-4 h-4 mr-2' />
             {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
           </Button>
@@ -242,8 +251,9 @@ export default function ProductsPage() {
   });
 
   return (
-    <div className='min-h-screen bg-zinc-950 p-4'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='min-h-screen bg-zinc-950 '>
+      <Header />
+      <div className='max-w-7xl mx-auto pt-10'>
         {/* Header */}
         <div className='mb-8'>
           <h1 className='text-4xl font-bold text-white mb-2'>Our Products</h1>

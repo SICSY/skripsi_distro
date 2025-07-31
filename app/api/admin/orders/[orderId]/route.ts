@@ -7,6 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { orderId:
       where: { orderId: params.orderId },
       include: {
         customer: true,
+        product: true,
         productKustom: true,
         design: {
           include: {
@@ -40,6 +41,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { orderI
       data: { status },
       include: {
         customer: { select: { name: true, email: true } },
+        product: true,
         productKustom: { select: { name: true } }
       }
     });

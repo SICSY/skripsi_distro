@@ -717,7 +717,7 @@ export default function CheckoutPage() {
                 <Button onClick={() => router.push("/products")} className='flex-1 bg-blue-600 hover:bg-blue-700'>
                   Continue Shopping
                 </Button>
-                <Button variant='outline' onClick={() => router.push(`/orders/${orderResult.orderId}`)} className='border-zinc-600 text-zinc-300 hover:bg-zinc-800'>
+                <Button variant='outline' onClick={() => router.push(`/transaction`)} className='border-zinc-600 text-zinc-300 hover:bg-zinc-800'>
                   Track Order
                 </Button>
               </div>

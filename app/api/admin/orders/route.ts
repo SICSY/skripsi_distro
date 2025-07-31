@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           customer: { select: { name: true, email: true, phone: true } },
+          product: true,
           productKustom: { select: { name: true, photo: true } },
           design: { select: { totalObjects: true, hasUVGuide: true } }
         },

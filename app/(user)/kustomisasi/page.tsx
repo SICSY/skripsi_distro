@@ -1535,7 +1535,7 @@ export default function ModelConfigurator() {
           </Card>
         </div>
 
-        <div className='overflow-clip p-20 w-full h-full'>
+        <div className='overflow-clip p-20 min-w-96 w-full h-full'>
           {isARMode && selectedModel ? (
             <ARMode modelUrl={selectedModel.modelUrl} fabricCanvasRef={fabricCanvasRef} selectedColor={selectedColor} onExitAR={handleExitAR} />
           ) : (

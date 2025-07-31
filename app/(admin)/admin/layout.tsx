@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Settings, Menu, X, LogOut } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Settings, Menu, X, LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -15,12 +15,11 @@ const navigation = [
   { name: "Products", href: "/admin/products", icon: Package },
   { name: "Customers", href: "/admin/customers", icon: Users },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
-]
+];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-zinc-950">
@@ -39,12 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.name}
                 href={item.href}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                  pathname === item.href
-                    ? "bg-blue-600 text-white"
-                    : "text-zinc-300 hover:text-white hover:bg-zinc-800",
-                )}
+                className={cn("flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors", pathname === item.href ? "bg-blue-600 text-white" : "text-zinc-300 hover:text-white hover:bg-zinc-800")}
                 onClick={() => setSidebarOpen(false)}
               >
                 <item.icon className="w-4 h-4" />
@@ -65,10 +59,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               key={item.name}
               href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                pathname === item.href ? "bg-blue-600 text-white" : "text-zinc-300 hover:text-white hover:bg-zinc-800",
-              )}
+              className={cn("flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors", pathname === item.href ? "bg-blue-600 text-white" : "text-zinc-300 hover:text-white hover:bg-zinc-800")}
             >
               <item.icon className="w-4 h-4" />
               {item.name}
@@ -101,5 +92,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <main className="p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

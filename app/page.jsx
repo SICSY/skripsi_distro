@@ -13,6 +13,7 @@ import ModelConfigurator, { Scene } from "./(user)/transaction/page";
 import dynamic from "next/dynamic";
 import { KaosModel } from "@/src/view/scene/Kaos";
 import { Center, OrbitControls, Resize } from "@react-three/drei";
+import Marquee from "@/src/view/section/marquee";
 
 const View = dynamic(() => import("@/src/dom/View").then((mod) => mod.View), { ssr: false });
 
@@ -114,6 +115,7 @@ const page = () => {
             </svg>
           </div>
         </div>
+        <Marquee />
       </div>
     </div>
   );
