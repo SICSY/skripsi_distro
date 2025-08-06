@@ -84,7 +84,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useSnapshot } from "valtio";
-import { state } from "../state/valtio/State";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +94,6 @@ import { Home, Package, Receipt, Settings, ShoppingCart, Menu } from "lucide-rea
 
 const Header = () => {
   const router = useRouter();
-  const snap = useSnapshot(state);
   const transition = { type: "spring", duration: 0.8 };
   const [role, setRole] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -108,29 +106,21 @@ const Header = () => {
     }
   }, [isLoaded, user]);
 
-  const handleLogoClick = () => {
-    if (snap.intro === false) {
-      state.intro = true;
-    } else {
-      router.push("/");
-    }
-  };
-
   const menuItems = [
     {
       href: "/produk",
       label: "Produk",
-      icon: Package,
+      icon: Package
     },
     {
       href: "/kustomisasi",
       label: "Kustomisasi",
-      icon: Package,
+      icon: Package
     },
     {
       href: "/transaction",
       label: "Transaksi",
-      icon: Receipt,
+      icon: Receipt
     },
     ...(role
       ? [
@@ -138,29 +128,31 @@ const Header = () => {
             href: "/admin",
             label: "Admin Dashboard",
             icon: Settings,
-            badge: role,
-          },
+            badge: role
+          }
         ]
-      : []),
+      : [])
   ];
 
   return (
-    <motion.header className=" w-full top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm" initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4 sm:gap-8">
+    <motion.header className=' w-full top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm' initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4 sm:gap-8'>
         {/* Logo Section */}
-        <motion.div className="cursor-pointer transition-all duration-300" whileHover={{ scale: 1.05 }} transition={transition} onClick={handleLogoClick}>
-          <div className="flex items-center gap-3">
-            <Home className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-            <span className="text-lg sm:text-xl font-bold text-foreground tracking-tight">{snap.intro ? "CustomWear" : "Kembali"}</span>
+        <motion.div className='cursor-pointer transition-all duration-300' whileHover={{ scale: 1.05 }} transition={transition}>
+          <div className='flex items-center gap-3'>
+            <Home className='w-5 h-5 sm:w-6 sm:h-6 text-primary' />
+            <Link href='/' className='text-lg sm:text-xl font-bold text-foreground tracking-tight'>
+              CustomWear
+            </Link>
           </div>
         </motion.div>
 
         {/* Desktop Navigation */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList className="flex  items-center gap-1">
+        <NavigationMenu className='hidden md:flex'>
+          <NavigationMenuList className='flex  items-center gap-1'>
             {menuItems.map((item) => (
               <NavigationMenuItem key={item.href}>
-                <motion.div className="flex flex-row" whileHover={{ scale: 1.05 }} transition={transition}>
+                <motion.div className='flex flex-row' whileHover={{ scale: 1.05 }} transition={transition}>
                   <NavigationMenuLink asChild>
                     <Link
                       href={item.href}
@@ -168,7 +160,7 @@ const Header = () => {
                         item.href === "/admin" ? "text-primary hover:text-primary/80 hover:bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-accent"
                       }`}
                     >
-                      <item.icon className="w-4 h-4" />
+                      <item.icon className='w-4 h-4' />
                       {item.label}
                     </Link>
                   </NavigationMenuLink>
@@ -179,35 +171,35 @@ const Header = () => {
         </NavigationMenu>
 
         {/* Right Section */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className='flex items-center gap-3 sm:gap-4'>
           {/* Mobile Menu Trigger */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md">
-                <Menu className="w-5 h-5" />
+              <Button variant='ghost' size='icon' className='md:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md'>
+                <Menu className='w-5 h-5' />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="bg-card border-border w-80">
+            <SheetContent side='left' className='bg-card border-border w-80'>
               <SheetHeader>
-                <SheetTitle className="flex items-center gap-3 text-lg font-bold text-foreground">
-                  <Home className="w-5 h-5 text-primary" />
+                <SheetTitle className='flex items-center gap-3 text-lg font-bold text-foreground'>
+                  <Home className='w-5 h-5 text-primary' />
                   CustomWear
                 </SheetTitle>
               </SheetHeader>
 
-              <div className="mt-8">
-                <nav className="space-y-2">
+              <div className='mt-8'>
+                <nav className='space-y-2'>
                   {menuItems.map((item, index) => (
                     <motion.div key={item.href} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }}>
                       <Link
                         href={item.href}
-                        className="flex items-center gap-3 w-full p-3 rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-accent hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-ring"
+                        className='flex items-center gap-3 w-full p-3 rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-accent hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-ring'
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <item.icon className="w-5 h-5" />
+                        <item.icon className='w-5 h-5' />
                         <span>{item.label}</span>
                         {item.badge && (
-                          <Badge variant="secondary" className="ml-auto">
+                          <Badge variant='secondary' className='ml-auto'>
                             {item.badge}
                           </Badge>
                         )}
@@ -221,19 +213,19 @@ const Header = () => {
 
           {/* Cart Button */}
           <motion.div whileHover={{ scale: 1.1 }} transition={transition}>
-            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200" onClick={() => router.push("/checkout")}>
-              <ShoppingCart className="w-5 h-5" />
+            <Button variant='ghost' size='icon' className='relative text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200' onClick={() => router.push("/checkout")}>
+              <ShoppingCart className='w-5 h-5' />
             </Button>
           </motion.div>
 
-          <Separator orientation="vertical" className="h-6 bg-border hidden sm:block" />
+          <Separator orientation='vertical' className='h-6 bg-border hidden sm:block' />
 
           {/* Authentication */}
-          <div className="flex items-center">
+          <div className='flex items-center'>
             <SignedOut>
               <motion.div whileHover={{ scale: 1.05 }} transition={transition}>
-                <SignInButton mode="modal">
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium transition-all duration-200 shadow-sm">Sign In</Button>
+                <SignInButton mode='modal'>
+                  <Button className='bg-primary text-primary-foreground hover:bg-primary/90 font-medium transition-all duration-200 shadow-sm'>Sign In</Button>
                 </SignInButton>
               </motion.div>
             </SignedOut>
@@ -245,8 +237,8 @@ const Header = () => {
                     elements: {
                       userButtonAvatarBox: "w-10 h-10 ring-2 ring-border transition-all duration-200 hover:ring-primary",
                       userButtonPopoverCard: "bg-card border-border shadow-lg",
-                      userButtonPopoverActionButton: "text-muted-foreground hover:text-foreground hover:bg-accent",
-                    },
+                      userButtonPopoverActionButton: "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    }
                   }}
                 />
               </motion.div>

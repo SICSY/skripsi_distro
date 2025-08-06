@@ -20,7 +20,9 @@ mockup.glb
 mockups.glb
 # production
 /build
-
+/public/models/*
+/public/file/*
+/public/uploads/*
 # misc
 .DS_Store
 *.pem
@@ -40,8 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-/prisma/src/generated/prisma
 
 /src/generated/prisma
 

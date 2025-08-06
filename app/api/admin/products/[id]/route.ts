@@ -68,20 +68,6 @@ export async function PUT(request: NextRequest, { params }: { params: { productI
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ produkId: string }> }) {
   const { produkId } = await params;
   try {
-    // Check if product has orders
-
-    console.log(produkId);
-    // const orderCount = await prisma.order.count({
-    //   where: { productId: params.productId },
-    // })
-
-    // if (orderCount > 0) {
-    //   return NextResponse.json(
-    //     { success: false, message: "Cannot delete product with existing orders" },
-    //     { status: 400 },
-    //   )
-    // }
-
     await prisma.product.delete({
       where: { id: produkId }
     });

@@ -1,57 +1,3 @@
-// "use client";
-
-// import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
-// import { FabricImage } from "fabric";
-// import { use, useEffect, useRef } from "react";
-// import { state } from "../state/valtio/State";
-// import * as fabric from "fabric";
-// const Fabric = () => {
-//   const canvasRef = useRef();
-
-//   const { onReady, editor, selectedObjects } = useFabricJSEditor();
-//   const setBackgroundImage = (url) => {
-//     fabric.Image.fromURL(url, (img) => {
-//       const width = img.width;
-//       const height = img.height;
-
-//       // Resize canvas to fit image
-//       editor.canvas.setWidth(width);
-//       editor.canvas.setHeight(height);
-
-//       // Set background image
-//       editor.canvas.setBackgroundImage(img, editor.canvas.renderAll.bind(editor.canvas));
-//     });
-//   };
-
-//   useEffect(() => {
-//     if (editor?.canvas) {
-//       console.log(editor.canvas);
-//       editor.canvas.sendObjectToBack(editor.canvas.getActiveObject());
-//       window.fabricCanvas = editor.canvas; // simpan global untuk sementara
-//     }
-//   }, [editor]);
-//   const onAddImage = async () => {
-//     let image = await FabricImage.fromURL("./Strip_texture.png");
-//     image.scale(0.1);
-//     editor.canvas.add(image);
-//   };
-//   const onAddBg = async () => {
-//     let image = await FabricImage.fromURL("./uv_texture.png");
-//     image.getScaledHeight(editor.canvas.height);
-//     image.getScaledWidth(editor.canvas.width);
-//     editor.canvas.add(image);
-//   };
-
-//   return (
-//     <div className='relative right-1/3'>
-//       <button onClick={onAddImage}>tambah decals</button>
-//       <button onClick={onAddBg}>tambah Uv</button>
-//       <FabricJSCanvas ref={canvasRef} onReady={onReady} className='border w-96 h-96'></FabricJSCanvas>
-//     </div>
-//   );
-// };
-
-// export default Fabric;
 "use client";
 
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
@@ -92,7 +38,6 @@ const Fabric = () => {
       editor.canvas.renderAll();
 
       setIsUvLoaded(true);
-      console.log("UV texture loaded successfully");
     } catch (error) {
       console.error("Error loading UV texture:", error);
     }
@@ -121,8 +66,6 @@ const Fabric = () => {
       editor.canvas.add(image);
       editor.canvas.setActiveObject(image);
       editor.canvas.renderAll();
-
-      console.log("Decal added successfully");
     } catch (error) {
       console.error("Error adding decal:", error);
     }
@@ -130,7 +73,6 @@ const Fabric = () => {
 
   useEffect(() => {
     if (editor?.canvas && !isUvLoaded) {
-      console.log("Canvas ready, loading UV texture...");
       // Set canvas size
       editor.canvas.setWidth(400);
       editor.canvas.setHeight(400);

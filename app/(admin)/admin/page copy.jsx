@@ -16,7 +16,6 @@ export default function Page() {
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { data, isLoading, mutate } = useSWR("/api/admin/file_models", fetcher);
-  console.log(data);
   const [formData, formAction, isPending] = useActionState(submitFileModels, {
     sukses: false,
     message: "",

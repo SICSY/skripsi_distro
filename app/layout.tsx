@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Major_Mono_Display } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Layout from "@/src/dom/Layout";
-import { currentUser } from "@clerk/nextjs/server";
-import prisma from "@/lib/prisma";
-import { Role } from "@prisma/client";
+// import { currentUser } from "@clerk/nextjs/server";
+// import prisma from "@/lib/prisma";
+// import { Role } from "@prisma/client";
 import { Toaster } from "sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"]
@@ -14,6 +15,13 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"]
+});
+
+const majorMono = Major_Mono_Display({
+  variable: "--font-major",
+  weight: "400",
+  style: "normal",
   subsets: ["latin"]
 });
 
@@ -27,29 +35,49 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
-  let role: Role = Role.MEMBER;
-  const rawRole = user?.publicMetadata.role;
-  if (typeof rawRole === "string") {
-    const upperRole = rawRole.toUpperCase();
+  // const user = await currentUser();
 
-    if (Object.values(Role).includes(upperRole as Role)) {
-      role = upperRole as Role;
-    }
-  }
+  // if (user) {
+  //   const rawRole = user.publicMetadata?.role;
+  //   let role: Role = Role.MEMBER;
 
-  if (user) {
-    await prisma.user.upsert({
-      where: { providerId: user.id },
-      update: {},
-      create: {
-        providerId: user.id,
-        email: user.emailAddresses[0].emailAddress || "",
-        name: user.firstName || "",
-        role
-      }
-    });
-  }
+  //   if (typeof rawRole === "string") {
+  //     const upperRole = rawRole.toUpperCase();
+
+  //     if (Object.values(Role).includes(upperRole as Role)) {
+  //       role = upperRole as Role;
+
+  //       // Update metadata only if role needs to be normalized
+  //       if (rawRole !== upperRole) {
+  //         await prisma.$transaction([
+  //           prisma.user.upsert({
+  //             where: { providerId: user.id },
+  //             update: {},
+  //             create: {
+  //               providerId: user.id,
+  //               email: user.emailAddresses[0]?.emailAddress || "",
+  //               name: user.firstName || "",
+  //               role
+  //             }
+  //           })
+  //         ]);
+  //       }
+  //     }
+  //   } else {
+  //     // Fallback user creation without custom role
+  //     await prisma.user.upsert({
+  //       where: { providerId: user.id },
+  //       update: {},
+  //       create: {
+  //         providerId: user.id,
+  //         email: user.emailAddresses[0]?.emailAddress || "",
+  //         name: user.firstName || "",
+  //         role
+  //       }
+  //     });
+  //   }
+  // }
+
   return (
     <ClerkProvider
       appearance={{
@@ -57,10 +85,9 @@ export default async function RootLayout({
       }}
     >
       <html lang='en'>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body className={`${geistSans.variable} ${geistMono.variable} ${majorMono.variable} antialiased`}>
           <Toaster />
           <Layout>{children}</Layout>
-          {/* {children} */}
         </body>
       </html>
     </ClerkProvider>

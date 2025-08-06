@@ -13,7 +13,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ transact
         design: true
       }
     });
-    console.log("dat ", transaction);
     if (!transaction) {
       return NextResponse.json({ success: false, message: "Transaction not found" }, { status: 404 });
     }

@@ -1,29 +1,11 @@
 import type { NextConfig } from "next";
 
-// const nextConfig: NextConfig = {
-//   /* config options here */
-//   transpilePackages: ["three"],
-//   eslint: {
-//     ignoreDuringBuilds: true
-//   },
-//   typescript: {
-//     ignoreBuildErrors: true
-//   },
-//   experimental: {
-//     serverActions: {
-//       bodySizeLimit: "10mb"
-//     }
-//   }
-// };
-
-// export default nextConfig;
-// /** @type {import('next').NextConfig} */
-
 const nextConfig: NextConfig = {
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.externals.push("sharp");
     }
+
     // Handle Zappar WASM files
     config.module.rules.push({
       test: /zcv\.wasm$/,
@@ -33,42 +15,30 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  // transpilePackages: ["@theatre/r3f","three"],
+  reactStrictMode: true,
+  turbopack: {
+    resolveAlias: {
+      react: "react",
+      "react-dom": "react-dom",
+      "@react-three/fiber": "@react-three/fiber"
+    },
 
-  // Enable experimental features for WASM
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb"
-    }
+    // 👇 Optional: if you use non-standard extensions
+    resolveExtensions: [".vert", ".frag", ".tsx", ".ts", ".jsx", ".js", ".json", ".css"]
   },
-
-  // Headers for WASM and SharedArrayBuffer
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Cross-Origin-Embedder-Policy",
-            value: "require-corp"
-          },
-          {
-            key: "Cross-Origin-Opener-Policy",
-            value: "same-origin"
-          }
-        ]
-      }
-    ];
-  },
-
   eslint: {
     ignoreDuringBuilds: true
   },
   typescript: {
     ignoreBuildErrors: true
   },
-  images: {
-    unoptimized: true
+  experimental: {
+    // webpackBuildWorker: true,
+    serverActions: {
+      bodySizeLimit: "10mb"
+    }
   }
 };
 
-module.exports = nextConfig;
+export default nextConfig;

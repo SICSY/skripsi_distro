@@ -659,7 +659,6 @@ const ARMode = memo(({ modelUrl, fabricCanvasRef, selectedColor, onExitAR }: { m
 export default function ModelConfigurator() {
   const router = useRouter();
   const { data: getModel, isLoading, error } = useSWR<ModelData[]>("/api/admin/productKustom", fetcher);
-  console.log(getModel, "getModel");
   const canvasRef = useRef<HTMLCanvasElement>(null!);
   const fabricCanvasRef = useRef<FabricCanvas | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1412,9 +1411,7 @@ export default function ModelConfigurator() {
       };
 
       try {
-        console.log(checkoutData);
         const checkoutDataString = JSON.stringify(checkoutData);
-        console.log(checkoutDataString);
         localStorage.setItem("checkoutData", checkoutDataString);
         sessionStorage.setItem("checkoutData", checkoutDataString);
         router.push("/checkout");
@@ -1435,7 +1432,7 @@ export default function ModelConfigurator() {
   return (
     <div className='relative h-full w-full'>
       <Header />
-      <div className='h-full w-full flex'>
+      <div className='h-screen w-full flex'>
         <div className='min-w-fit p-4 overflow-y-auto'>
           <Card className='bg-zinc-900 text-white'>
             <CardHeader>
@@ -1535,11 +1532,11 @@ export default function ModelConfigurator() {
           </Card>
         </div>
 
-        <div className='overflow-clip p-20 min-w-96 w-full h-full'>
+        <div className='overflow-clip p-20 min-w-96 min-h-full w-full h-full'>
           {isARMode && selectedModel ? (
             <ARMode modelUrl={selectedModel.modelUrl} fabricCanvasRef={fabricCanvasRef} selectedColor={selectedColor} onExitAR={handleExitAR} />
           ) : (
-            <View ref={viewRef} className='size-full box-border border-2 border-[#464444]'>
+            <View ref={viewRef} className='h-full w-full box-border border-2 border-[#464444]'>
               <MemoizedScene {...sceneProps} />
             </View>
           )}
